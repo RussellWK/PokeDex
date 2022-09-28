@@ -16,8 +16,10 @@ scroll{
 h1{
     font-size: 80px;
     color: blueviolet;
+    margin-top: 0;
+    margin-bottom: 0;
 }
-#search{
+button{
     background-color: rgb(201, 174, 226);
     border: 3px solid rgb(85, 100, 110)
 }

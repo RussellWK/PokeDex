@@ -2,8 +2,12 @@
 let searchButton = document.getElementById("search")
 let nextButton = document.getElementById("next")
 let previousButton = document.getElementById("previous")
+let statsButton = document.getElementById("statsButton")
+let infoButton = document.getElementById("infoButton")
+let abilitiesButton = document.getElementById("abilitiesButton")
+
 let pokemonName = "Bulbasaur"
-let baseXp, height, id, numberOfPokemon
+let id, numberOfPokemon, text, statsText, data
 
 let createLength = async function(){
     let response= await fetch("https://pokeapi.co/api/v2/pokemon-species/")
@@ -34,27 +38,54 @@ previousButton.addEventListener('click', event =>{
     loadPokemon(id)
 })
 
+infoButton.addEventListener('click', event =>{
+    document.getElementById("info").innerHTML = text
+})
+
+statsButton.addEventListener('click', event =>{
+    statsText='<b>Stats</b><Br/><Br/>'
+    for (let i = 0; i<data.stats.length; i++){
+        statsText += 'Base '+data.stats[i].stat.name+' : '+data.stats[i].base_stat+'<br/><br/>'
+    } 
+    document.getElementById("info").innerHTML = statsText
+})
+
+abilitiesButton.addEventListener('click', event =>{
+    abilitiesText='<b>Abilities</b><Br/><Br/>'
+    for (let i = 0; i<data.abilities.length; i++){
+        abilitiesText +=data.abilities[i].ability.name+'<br/><br/>'
+    } 
+    document.getElementById("info").innerHTML = abilitiesText
+})
+
+
 let loadPokemon = async function(nameOrId){
     let url = "https://pokeapi.co/api/v2/pokemon/"+nameOrId+"/"
     let response= await fetch(url)
-    let data = await response.json()
+    data = await response.json()
     console.log(data)
     id = data.id
     apiName = data.name
-    baseXp=data.base_experience
-    height=data.height
-    image=data.sprites.front_default
-    gender=male
-    attack
+    image = data.sprites.front_default
+    text = '<b>Basic Info</b><Br/><Br/>'+"ID : "+id
+    +'<br/><br/>Base XP : '+data.base_experience
+    +'<br/><br/>Height : '+data.height
+    +'<br/><br/>Types : '
+    for (let i = 0; i<data.types.length; i++){
+        if (i===0){
+            text+= data.types[i].type.name
+        }
+        else{
+            text+= ', '+ data.types[i].type.name  
+        }
+    }
     draw()
     }
 
 let draw = function(){
-    document.getElementById("id").innerHTML = "ID : "+ id + "0"
     document.getElementById("image").src = image
     document.getElementById("name").innerHTML = capitalize(apiName)
-    document.getElementById("baseXP").innerHTML = "Base XP : "+baseXp
-    document.getElementById("height").innerHTML = "Height : "+ height
+    document.getElementById("info").innerHTML = text
 }
 
 createLength()
