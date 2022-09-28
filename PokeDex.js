@@ -54,10 +54,17 @@ abilitiesButton.addEventListener('click', event =>{
     abilitiesText='<b>Abilities</b><Br/><Br/>'
     for (let i = 0; i<data.abilities.length; i++){
         abilitiesText +=data.abilities[i].ability.name+'<br/><br/>'
+        loadAbility(data.abilities[i].ability.url)  
     } 
     document.getElementById("info").innerHTML = abilitiesText
 })
 
+let loadAbility = async function(url){
+    let responseAbilities= await fetch(url)
+    let abilityData = await responseAbilities.json()
+    abilitiesText += abilityData.flavor_text_entries[0].flavor_text +'<br/><br/>'
+    console.log(abilitiesText)
+}
 
 let loadPokemon = async function(nameOrId){
     let url = "https://pokeapi.co/api/v2/pokemon/"+nameOrId+"/"
@@ -79,14 +86,10 @@ let loadPokemon = async function(nameOrId){
             text+= ', '+ data.types[i].type.name  
         }
     }
-    draw()
-    }
-
-let draw = function(){
     document.getElementById("image").src = image
     document.getElementById("name").innerHTML = capitalize(apiName)
     document.getElementById("info").innerHTML = text
-}
+    }
 
 createLength()
 loadPokemon(1)
