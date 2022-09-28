@@ -1,0 +1,32 @@
+*{
+    text-align : center;
+}
+scroll{
+    display: flexbox;
+    align-items: center;
+    justify-content: center;
+}
+#image{
+
+    margin: 0px 10px -40px 10px;
+}
+#next{
+    margin-left: 20px;
+}
+h1{
+    font-size: 80px;
+    color: blueviolet;
+}
+#search{
+    background-color: rgb(201, 174, 226);
+    border: 3px solid rgb(85, 100, 110)
+}
+h2{
+    margin-top: 30px;
+}
+h4{
+    margin-bottom: 10px;
+}
+searchBar{
+    display: block;
+}
