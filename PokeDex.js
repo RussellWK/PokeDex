@@ -44,11 +44,18 @@ let loadPokemon = async function(nameOrId){
     baseXp=data.base_experience
     height=data.height
     image=data.sprites.front_default
-    document.getElementById("id").innerHTML = "ID : "+ id
+    gender=male
+    attack
+    draw()
+    }
+
+let draw = function(){
+    document.getElementById("id").innerHTML = "ID : "+ id + "0"
     document.getElementById("image").src = image
     document.getElementById("name").innerHTML = capitalize(apiName)
     document.getElementById("baseXP").innerHTML = "Base XP : "+baseXp
     document.getElementById("height").innerHTML = "Height : "+ height
 }
+
 createLength()
 loadPokemon(1)
