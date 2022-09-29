@@ -1,15 +1,40 @@
 
+let textInfo = document.getElementById("info")
 let searchButton = document.getElementById("search")
 let nextButton = document.getElementById("next")
 let previousButton = document.getElementById("previous")
 let statsButton = document.getElementById("statsButton")
 let infoButton = document.getElementById("infoButton")
 let abilitiesButton = document.getElementById("abilitiesButton")
-let numberOfPokemon, data, id, text, statsText, abilitiesText
+let allButton = document.getElementById("allPokemon")
+let kantoButton = document.getElementById("kanto")
+let johtoButton = document.getElementById("johto")
+let selectPokemon = document.getElementById("selectPokemon")
+let previous20 = document.getElementById("previous20")
+let next20 = document.getElementById("next20")
+
+let id, text, statsText, abilitiesText, startRegion, endRegion, numberOfPokemon
+let startPokemonList = 0
 
 let capitalize = function(string){
     return string[0].toUpperCase() + string.slice(1,)
 }
+
+selectPokemon.addEventListener('change', event => {
+    loadPokemon(selectPokemon.value)
+})
+
+allButton.addEventListener('click', event =>{
+    selectRegion(1)
+})
+
+kantoButton.addEventListener('click', event =>{
+    selectRegion(2)
+})
+
+johtoButton.addEventListener('click', event =>{
+    selectRegion(3)
+})
 
 searchButton.addEventListener('click', event =>{
     pokemonName = document.getElementById("pokemon")
@@ -19,30 +44,33 @@ searchButton.addEventListener('click', event =>{
 })
 
 nextButton.addEventListener('click', event =>{
-    id = (id+1)%numberOfPokemon
+    id = id+1
+    if (id>endRegion || id<startRegion){
+        id=startRegion
+    }
     loadPokemon(id)
 })
 previousButton.addEventListener('click', event =>{
     id = id-1
-    if (id<=0){
-        id = numberOfPokemon
+    if (id<startRegion || id>endRegion){
+        id = endRegion
     }
     loadPokemon(id)
 })
 
 infoButton.addEventListener('click', event =>{
-    document.getElementById("info").innerHTML = text
+    textInfo.innerHTML = text
 })
 
 statsButton.addEventListener('click', event =>{
-    document.getElementById("info").innerHTML = statsText
+    textInfo.innerHTML = statsText
 })
 
 abilitiesButton.addEventListener('click', event =>{
-    document.getElementById("info").innerHTML = abilitiesText
+    textInfo.innerHTML = abilitiesText
 })
 
- let loadBasicInfo = function(data){
+let loadBasicInfo = function(data){
     text = '<b>Basic Info</b><Br/><Br/>'+"ID : "+id
     +'<br/><br/>Base XP : '+data.base_experience
     +'<br/><br/>Height : '+data.height
@@ -55,7 +83,9 @@ abilitiesButton.addEventListener('click', event =>{
         else{
             text+= ', '+ data.types[i].type.name  
         }
-    }}
+    }
+    text+='<br/><br/>'
+}
 
 let loadStats = function(data){
     statsText='<b>Stats</b><Br/><Br/>'
@@ -81,8 +111,58 @@ let loadAbilities = async function(data){
             }
         })
     } 
- }
+}
 
+let loadPokemonList = function(){
+    let pokemonList = ''
+    let pokemonListURL = 'https://pokeapi.co/api/v2/pokemon/?limit=20&offset='+startPokemonList
+    document.getElementById('pokemonListLabel').innerHTML = startPokemonList+' : '+(startPokemonList+20)
+    fetch(pokemonListURL)
+    .then(response => {return response.json()})
+    .then(pokemonListData=>{
+        for (let i = 0; i<20; i++){
+            pokemonList+='<option value="'+pokemonListData.results[i].name+'">'+pokemonListData.results[i].name+'</option>'
+        }
+        selectPokemon.innerHTML = pokemonList
+    })
+}
+
+previous20.addEventListener('click', event=>{
+    if (startPokemonList>=20){
+        startPokemonList-=20
+        loadPokemonList()
+    }
+})
+
+next20.addEventListener('click', event=>{
+    if (startPokemonList<numberOfPokemon-20){
+        startPokemonList+=20
+        loadPokemonList()
+    }
+})
+
+let selectRegion = function(region){
+    let regionURL = 'https://pokeapi.co/api/v2/pokedex/'+region+'/'
+    fetch(regionURL)
+    .then(response => {return response.json()})
+    .then(data=>{
+        console.log(data.pokemon_entries[0].pokemon_species.url)
+        fetch(data.pokemon_entries[0].pokemon_species.url)
+        .then(response => {return response.json()})
+        .then(firstPokemonData=>{
+        startRegion=firstPokemonData.id
+        loadPokemon(startRegion)
+        })
+        fetch(data.pokemon_entries[data.pokemon_entries.length-1].pokemon_species.url)
+        .then(response => {return response.json()})
+        .then(lastPokemonData=>{
+        endRegion=lastPokemonData.id
+        if (region===1){
+            numberOfPokemon=endRegion
+        }
+        })
+    })   
+}
 
 let loadPokemon = function(nameOrId){
     let newURL = "https://pokeapi.co/api/v2/pokemon/"+nameOrId+"/"
@@ -96,16 +176,12 @@ let loadPokemon = function(nameOrId){
     document.getElementById("image").src = image
     document.getElementById("name").innerHTML = capitalize(apiName)
     loadBasicInfo(data)
-    document.getElementById("info").innerHTML = text
+    textInfo.innerHTML = text
+    
     loadStats(data)
     loadAbilities(data)
     })
-    }
+}
 
-
-fetch("https://pokeapi.co/api/v2/pokemon-species/")
-.then(response => {return response.json()})
-.then(data=>{
-    numberOfPokemon = data.count
-    loadPokemon(Math.floor(Math.random()*numberOfPokemon+1))
-})
+selectRegion(1)
+loadPokemonList()
