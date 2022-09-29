@@ -158,21 +158,15 @@ let selectRegion = function(region){
     fetch(regionURL)
     .then(response => {return response.json()})
     .then(data=>{
-        fetch(data.pokemon_entries[0].pokemon_species.url)
-        .then(response => {return response.json()})
-        .then(firstPokemonData=>{
-        startRegion=firstPokemonData.id
+        let seperatedURL = data.pokemon_entries[0].pokemon_species.url.split('/')
+        startRegion=seperatedURL[seperatedURL.length-2]
         loadPokemon(startRegion)
-        })
-        fetch(data.pokemon_entries[data.pokemon_entries.length-1].pokemon_species.url)
-        .then(response => {return response.json()})
-        .then(lastPokemonData=>{
-        endRegion=lastPokemonData.id
+        seperatedURL = data.pokemon_entries[data.pokemon_entries.length-1].pokemon_species.url.split('/')
+        endRegion=seperatedURL[seperatedURL.length-2]
         if (firstLoad===true){
             firstLoad=false
             numberOfPokemon=endRegion
         }
-        })
     })   
 }
 
