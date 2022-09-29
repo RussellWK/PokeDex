@@ -9,6 +9,10 @@ html{
     margin-left: 100px;
     margin-right: 100px;
 }
+.arrow{
+    height: 90px;
+    width: 90px;
+}
 #scroll{
     display: flexbox;
     align-items: center;
@@ -20,21 +24,25 @@ html{
 
 }
 #pokemonListLabel{
-    color: yellow;
-    
+    padding-right: 10px;
+}
+#selectPokemon,#pokemon{
+    width: 150px;
 }
 #image{
-    margin: 10px 10px -40px 10px;
+    margin: 10px 10px -45px 10px;
 }
-#next{
-    margin-left: 20px;
+#regionLabel{
+    display: block;
 }
-h1,h2,h4{
+
+h1,h2,h4,label{
     color: yellow;
 }
 h1{
-    -webkit-text-stroke: 2px blue;
+    -webkit-text-stroke: 1px blue;
     font-size: 80px;
+    font-family: 'Franklin Gothic Medium';
     margin-top: 0;
     margin-bottom: 0;
 }

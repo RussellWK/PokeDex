@@ -15,25 +15,33 @@ let next20 = document.getElementById("next20")
 
 let id, text, statsText, abilitiesText, startRegion, endRegion, numberOfPokemon
 let startPokemonList = 0
+let firstLoad = true
 
-let capitalize = function(string){
-    return string[0].toUpperCase() + string.slice(1,)
+let capitalize = function(name){
+    let newName = ''
+    let items = name.split('-')
+    for (let i=0; i<items.length; i++){
+        newName+=items[i][0].toUpperCase() + items[i].slice(1,)+' '
+    }
+    return newName
 }
 
 selectPokemon.addEventListener('change', event => {
-    loadPokemon(selectPokemon.value)
+    if(selectPokemon.value!='false'){
+        loadPokemon(selectPokemon.value)
+    }
 })
 
 allButton.addEventListener('click', event =>{
-    selectRegion(1)
+    selectRegion('national')
 })
 
 kantoButton.addEventListener('click', event =>{
-    selectRegion(2)
+    selectRegion('kanto')
 })
 
 johtoButton.addEventListener('click', event =>{
-    selectRegion(3)
+    selectRegion('original-johto')
 })
 
 searchButton.addEventListener('click', event =>{
@@ -98,7 +106,6 @@ let loadAbilities = async function(data){
     abilitiesText='<b>Abilities</b><Br/><Br/>'
     for (let i = 0; i<data.abilities.length; i++){
         abilitiesText += '<b>'+data.abilities[i].ability.name+'</b><br/>'
-        //console.log(data.abilities[i].ability.url)
         await fetch(data.abilities[i].ability.url) 
         .then(response => {return response.json()}) 
         .then(abilityData=>{
@@ -114,13 +121,17 @@ let loadAbilities = async function(data){
 }
 
 let loadPokemonList = function(){
-    let pokemonList = ''
+    let pokemonList = '<option value="false">--Select Pokemon--</option>'
+    let numberInList = 20
+    if (numberOfPokemon-startPokemonList<20){
+        numberInList = numberOfPokemon-startPokemonList
+    }
     let pokemonListURL = 'https://pokeapi.co/api/v2/pokemon/?limit=20&offset='+startPokemonList
-    document.getElementById('pokemonListLabel').innerHTML = startPokemonList+' : '+(startPokemonList+20)
+    document.getElementById('pokemonListLabel').innerHTML = "ID's ("+(startPokemonList+1)+' : '+(startPokemonList+numberInList)+')'
     fetch(pokemonListURL)
     .then(response => {return response.json()})
     .then(pokemonListData=>{
-        for (let i = 0; i<20; i++){
+        for (let i = 0; i<numberInList; i++){
             pokemonList+='<option value="'+pokemonListData.results[i].name+'">'+pokemonListData.results[i].name+'</option>'
         }
         selectPokemon.innerHTML = pokemonList
@@ -143,10 +154,10 @@ next20.addEventListener('click', event=>{
 
 let selectRegion = function(region){
     let regionURL = 'https://pokeapi.co/api/v2/pokedex/'+region+'/'
+    document.getElementById('regionLabel').innerHTML = 'Region : '+capitalize(region)
     fetch(regionURL)
     .then(response => {return response.json()})
     .then(data=>{
-        console.log(data.pokemon_entries[0].pokemon_species.url)
         fetch(data.pokemon_entries[0].pokemon_species.url)
         .then(response => {return response.json()})
         .then(firstPokemonData=>{
@@ -157,7 +168,8 @@ let selectRegion = function(region){
         .then(response => {return response.json()})
         .then(lastPokemonData=>{
         endRegion=lastPokemonData.id
-        if (region===1){
+        if (firstLoad===true){
+            firstLoad=false
             numberOfPokemon=endRegion
         }
         })
@@ -169,7 +181,6 @@ let loadPokemon = function(nameOrId){
     fetch(newURL)
     .then(response => {return response.json()})
     .then(data=>{
-    //console.log(data)
     id = data.id
     let apiName = data.name
     let image = data.sprites.front_default
@@ -183,5 +194,5 @@ let loadPokemon = function(nameOrId){
     })
 }
 
-selectRegion(1)
+selectRegion('national')
 loadPokemonList()
