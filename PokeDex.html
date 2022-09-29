@@ -11,18 +11,29 @@
             <h4>Pokemon Name :</h4><input type="text" id="pokemon" value="bulbasaur" />
             <button id="search">Search</button>
         </searchBar>
-        <scroll>
+        <div id="pokemonList">
+            <label id="pokemonListLabel">0 : 20</label>
+            <select value="" id="selectPokemon"></select>
+            <button id="previous20">Previous 20</button>
+            <button id="next20">Next 20</button>
+        </div>
+        <div id="scroll">
+            <div id="regionList">
+                <button id="allPokemon">All Pokemon</button>
+                <button id="kanto">Kanto</button>
+                <button id="johto">Johto</button>
+            </div>
             <button id="previous"><-Previous</button>
-            <image alt="No image available" id="image" src=""></image>
+            <image class='white' alt="No image available" id="image" src=""></image>
             <button id="next">Next-></button>
-        </scroll>
+        </div>
         <h2 id="name"></h2>
         <pages>
             <button id="infoButton">Basic Info</button>
             <button id="statsButton">Stats</button>
             <button id="abilitiesButton">Abilities</button>
         </pages>
-        <p id="info"></p>
+        <p class='white' id="info"></p>
         <script id="javaScript" src="PokeDex.js"></script>
     </body>
 </html>

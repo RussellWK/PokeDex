@@ -1,34 +1,51 @@
 *{
     text-align : center;
 }
-scroll{
+html{
+    background-color: red;
+}
+.white{
+    background-color: white;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+#scroll{
     display: flexbox;
     align-items: center;
     justify-content: center;
+    background-color: black;
+    margin: 0px 100px 0px 100px;
+    padding-bottom: 60px;
+    padding-top: 10px;
+
+}
+#pokemonListLabel{
+    color: yellow;
+    
 }
 #image{
-
     margin: 10px 10px -40px 10px;
 }
 #next{
     margin-left: 20px;
 }
+h1,h2,h4{
+    color: yellow;
+}
 h1{
+    -webkit-text-stroke: 2px blue;
     font-size: 80px;
-    color: blueviolet;
     margin-top: 0;
     margin-bottom: 0;
 }
 button{
-    background-color: rgb(201, 174, 226);
-    border: 3px solid rgb(85, 100, 110)
-}
-h2{
-    margin-top: 30px;
+    background-color: yellow;
+    border: 3px solid blue;
 }
 h4{
     margin-bottom: 10px;
 }
-searchBar{
-    display: block;
+div{
+    margin-top:20px;
+    margin-bottom: 20px;
 }
