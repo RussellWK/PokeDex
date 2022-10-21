@@ -1,21 +1,4 @@
-
-let textInfo = document.getElementById("info")
-let searchButton = document.getElementById("search")
-let nextButton = document.getElementById("next")
-let previousButton = document.getElementById("previous")
-let statsButton = document.getElementById("statsButton")
-let infoButton = document.getElementById("infoButton")
-let abilitiesButton = document.getElementById("abilitiesButton")
-let allButton = document.getElementById("allPokemon")
-let kantoButton = document.getElementById("kanto")
-let johtoButton = document.getElementById("johto")
-let selectPokemon = document.getElementById("selectPokemon")
-let previous20 = document.getElementById("previous20")
-let next20 = document.getElementById("next20")
-
 let id, text, statsText, abilitiesText, startRegion, endRegion, numberOfPokemon
-let startPokemonList = 0
-let firstLoad = true
 
 let capitalize = function(name){
     let newName = ''
@@ -26,24 +9,29 @@ let capitalize = function(name){
     return newName
 }
 
+const selectPokemon = document.getElementById("selectPokemon")
 selectPokemon.addEventListener('change', event => {
     if(selectPokemon.value!='false'){
         loadPokemon(selectPokemon.value)
     }
 })
 
+const allButton = document.getElementById("allPokemon")
 allButton.addEventListener('click', event =>{
     selectRegion('national')
 })
 
+const kantoButton = document.getElementById("kanto")
 kantoButton.addEventListener('click', event =>{
     selectRegion('kanto')
 })
 
+const johtoButton = document.getElementById("johto")
 johtoButton.addEventListener('click', event =>{
     selectRegion('original-johto')
 })
 
+const searchButton = document.getElementById("search")
 searchButton.addEventListener('click', event =>{
     pokemonName = document.getElementById("pokemon")
     let formatedName = (pokemonName.value).toLowerCase()
@@ -51,6 +39,7 @@ searchButton.addEventListener('click', event =>{
 
 })
 
+const nextButton = document.getElementById("next")
 nextButton.addEventListener('click', event =>{
     id = id+1
     if (id>endRegion || id<startRegion){
@@ -58,6 +47,8 @@ nextButton.addEventListener('click', event =>{
     }
     loadPokemon(id)
 })
+
+const previousButton = document.getElementById("previous")
 previousButton.addEventListener('click', event =>{
     id = id-1
     if (id<startRegion || id>endRegion){
@@ -66,14 +57,18 @@ previousButton.addEventListener('click', event =>{
     loadPokemon(id)
 })
 
+const textInfo = document.getElementById("info")
+const infoButton = document.getElementById("infoButton")
 infoButton.addEventListener('click', event =>{
     textInfo.innerHTML = text
 })
 
+const statsButton = document.getElementById("statsButton")
 statsButton.addEventListener('click', event =>{
     textInfo.innerHTML = statsText
 })
 
+const abilitiesButton = document.getElementById("abilitiesButton")
 abilitiesButton.addEventListener('click', event =>{
     textInfo.innerHTML = abilitiesText
 })
@@ -120,6 +115,7 @@ let loadAbilities = async function(data){
     } 
 }
 
+let startPokemonList = 0
 let loadPokemonList = function(){
     let pokemonList = '<option value="false">--Select Pokemon--</option>'
     let numberInList = 20
@@ -138,6 +134,7 @@ let loadPokemonList = function(){
     })
 }
 
+const previous20 = document.getElementById("previous20")
 previous20.addEventListener('click', event=>{
     if (startPokemonList>=20){
         startPokemonList-=20
@@ -145,6 +142,7 @@ previous20.addEventListener('click', event=>{
     }
 })
 
+const next20 = document.getElementById("next20")
 next20.addEventListener('click', event=>{
     if (startPokemonList<numberOfPokemon-20){
         startPokemonList+=20
@@ -152,6 +150,7 @@ next20.addEventListener('click', event=>{
     }
 })
 
+let firstLoad = true
 let selectRegion = function(region){
     let regionURL = 'https://pokeapi.co/api/v2/pokedex/'+region+'/'
     document.getElementById('regionLabel').innerHTML = 'Region : '+capitalize(region)
@@ -182,7 +181,6 @@ let loadPokemon = function(nameOrId){
     document.getElementById("name").innerHTML = capitalize(apiName)
     loadBasicInfo(data)
     textInfo.innerHTML = text
-    
     loadStats(data)
     loadAbilities(data)
     })
